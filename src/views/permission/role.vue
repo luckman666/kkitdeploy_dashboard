@@ -5,28 +5,24 @@
     </el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="角色ID" width="220">
+      <el-table-column align="center" label="ID" width="50">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="角色名" width="220">
+      <el-table-column align="center" label="角色名" width="120">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column align="header-center" label="权限列表">
-        <!--<template slot-scope="scope">-->
         <div slot-scope="scope">
           <template v-for="permission in scope.row.permissions">
             <el-tag :key="permission.id">{{ permissions_tag[permission] }}</el-tag>
           </template>
         </div>
-
-          <!--{{ scope.row.permissions }}-->
-        <!--</template>-->
       </el-table-column>
-      <el-table-column align="center" label="Operations">
+      <el-table-column align="center" label="操作" width="190">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope)">
             {{ $t('permission.editPermission') }}
@@ -72,7 +68,7 @@ import path from 'path'
 import { deepClone } from '@/utils'
 import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
 import i18n from '@/lang'
-import fetch_Permission from '@/api/auth'
+import { fetch_Permission } from '@/api/auth'
 
 const defaultRole = {
   key: '',
@@ -134,12 +130,13 @@ export default {
       return app
     },
     init_permission_name() {
+      console.log('daozhele1')
       fetch_Permission().then(response => {
         this.permissions_tag = [];
         for (const per of response.data) {
           this.permissions_tag[per.id] = per.name;
         }
-        console.log('this.permissions_tag!!!!!',this.permissions_tag)
+        console.log('daozhele2')
         this.permissions = [];
         for (const per of response.data) {
           this.permissions.push({
@@ -148,6 +145,7 @@ export default {
             disabled: false
           });
         }
+        console.log('daozhele3')
       });
     },
     // Reshape the routes structure so that it looks the same as the sidebar
