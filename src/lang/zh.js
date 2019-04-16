@@ -85,6 +85,7 @@ export default {
   },
   permission: {
     addRole: '新增角色',
+    clear: '清除',
     editPermission: '编辑权限',
     roles: '你的权限',
     switchRoles: '切换权限',

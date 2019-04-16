@@ -58,12 +58,12 @@ import { objectIterator } from '@/utils/iterator'
 //   })
 // }
 //
-// export function is_expire_User(){
-//   return request({
-//     url: '/api-auth/v1/user/expire/',
-//     method: 'GET'
-//   })
-// }
+export function is_expire_User(){
+  return request({
+    url: '/api-auth/v1/user/expire/',
+    method: 'GET'
+  })
+}
 
 /*
 * API_MODULE: PmnList
@@ -76,31 +76,39 @@ import { objectIterator } from '@/utils/iterator'
 //     method: 'GET'
 //   })
 // }
-//
-// export function fetch_PmnGroupListByPage(pagination,obj){
-//   let st = objectIterator(obj)
-//   return request({
-//     url: '/api-auth/v1/group/bypage/'+ st +'&page='+pagination.page,
-//     method: 'GET'
-//   })
-// }
-//
-// export function create_PmnGroup(data){
-//   return request({
-//     url: '/api-auth/v1/group/create/',
-//     method: 'POST',
-//     data: data
-//   })
-// }
-//
-// export function update_PmnGroup(data){
-//   return request({
-//     url: '/api-auth/v1/group/'+data.id+'/update/',
-//     method: 'PUT',
-//     data: data
-//   })
-// }
-
+// 获取权限分组信息，用来支持分组搜索
+export function fetch_PmnGroupListByPage(pagination,obj){
+  let st = objectIterator(obj)
+  return request({
+    url: '/api-auth/v1/group/bypage/'+ st +'&page='+pagination.page,
+    method: 'GET'
+  })
+}
+// 创建组函数
+export function create_PmnGroup(data){
+  return request({
+    url: '/api-auth/v1/group/create/',
+    method: 'POST',
+    data: data
+  })
+}
+// 更新组设置
+export function update_PmnGroup(data){
+  return request({
+    url: '/api-auth/v1/group/'+data.id+'/update/',
+    method: 'PUT',
+    data: data
+  })
+}
+// 删除组
+export function delete_PmnGroup(data){
+  return request({
+    url: '/api-auth/v1/group/'+data.id+'/delete/',
+    method: 'DELETE',
+    data: data
+  })
+}
+// 获得所有权限
 export function fetch_Permission(){
   return request({
     url: '/api-auth/v1/permission/',
