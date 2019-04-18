@@ -3,7 +3,7 @@ import { getToken } from "@/utils/auth"
 import { Message } from 'element-ui'
 import store from '@/store'
 
-let BASE_API ='http://192.168.31.74:8001'
+let BASE_API ='http://localhost:8001'
 
 const service = axios.create({
   baseURL: BASE_API, // api 的 base_url

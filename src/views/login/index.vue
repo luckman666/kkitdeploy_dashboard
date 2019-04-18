@@ -22,7 +22,7 @@
           auto-complete="on"
         />
       </el-form-item>
-
+<!-- 大小写开启 -->
       <el-tooltip v-model="capsTooltip" content="大小写锁定已经开启" placement="right" manual>
         <el-form-item prop="password">
           <span class="svg-container">
@@ -51,24 +51,6 @@
       </el-button>
 
       <div style="position:relative">
-        <!--<div class="tips">-->
-          <!--<span>{{ $t('login.username') }} : admin</span>-->
-          <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
-        <!--</div>-->
-        <!--<div class="tips">-->
-          <!--<span style="margin-right:18px;">-->
-            <!--{{ $t('login.username') }} : editor-->
-          <!--</span>-->
-          <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
-        <!--</div>-->
-        <!-- 第三方登录按钮 -->
-        <!--<span style="margin-right:18px;">-->
-        <!--<div>-->
-          <!--<el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
-            <!--{{ $t('login.thirdparty') }}-->
-          <!--</el-button>-->
-        <!--</div>-->
-        <!--</span>-->
       </div>
     </el-form>
 
@@ -112,7 +94,7 @@ export default {
         password: 'root1234'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        username: [{ required: true, trigger: 'blur' }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
@@ -174,41 +156,19 @@ export default {
         var that = this
         if (valid) {
           that.loading = true
-          console.log('$refs', this.loginForm.password)
           that.$store.dispatch('user/login', that.loginForm)
             .then(() => {
-              console.log('好了')
               that.$router.push({ path: that.redirect || '/' })
               that.loading = false
             })
             .catch(() => {
-              console.log('错啦')
               that.loading = false
             })
         } else {
-          console.log('error submit!!')
           return false
         }
       })
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>

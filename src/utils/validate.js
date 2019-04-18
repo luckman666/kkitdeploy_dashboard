@@ -5,7 +5,7 @@
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
-
+// 登录用户时可以在这设置用户名的规则
 export function validUsername(str) {
   const valid_map = ['admin', 'editor','root']
   return valid_map.indexOf(str.trim()) >= 0

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import { removeToken } from "@/utils/auth"
 // 登录
 export function login(data) {
-  console.log('this.$refs.username',data)
+  console.log('data',data)
   return request({
     url: '/api-auth/login/',
     method: 'POST',

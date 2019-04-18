@@ -246,10 +246,7 @@ export default {
     },
     // 删除组
     deleteGroup(scope) {
-      // this.$refs["groupForm"].validate(valid => {
-      //   if (valid) {
           this.btnStatus = true;
-          console.log('data!!!!',scope)
           delete_PmnGroup(scope.row)
             .then(() => {
               this.init();
@@ -265,8 +262,6 @@ export default {
               this.btnStatus = false;
               this.reset_dialog();
             });
-      //   }
-      // });
     },
 
     reset_dialog() {
@@ -455,22 +450,22 @@ export default {
         this.checkStrictly = false
       })
     },
-    handleDelete({ $index, row }) {
-      this.$confirm('Confirm to remove the role?', 'Warning', {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      })
-        .then(async() => {
-          await deleteRole(row.key)
-          this.rolesList.splice($index, 1)
-          this.$message({
-            type: 'success',
-            message: 'Delete succed!'
-          })
-        })
-        .catch(err => { console.error(err) })
-    },
+    // handleDelete({ $index, row }) {
+    //   this.$confirm('Confirm to remove the role?', 'Warning', {
+    //     confirmButtonText: 'Confirm',
+    //     cancelButtonText: 'Cancel',
+    //     type: 'warning'
+    //   })
+    //     .then(async() => {
+    //       await deleteRole(row.key)
+    //       this.rolesList.splice($index, 1)
+    //       this.$message({
+    //         type: 'success',
+    //         message: 'Delete succed!'
+    //       })
+    //     })
+    //     .catch(err => { console.error(err) })
+    // },
     generateTree(routes, basePath = '/', checkedKeys) {
       const res = []
 

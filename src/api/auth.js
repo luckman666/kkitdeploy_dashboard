@@ -13,20 +13,20 @@ import { objectIterator } from '@/utils/iterator'
 //   })
 // }
 //
-// export function fetch_UserListByPage(pagination,obj){
-//   let st = objectIterator(obj)
-//   return request({
-//     url: '/api-auth/v1/user/bypage/'+st+'&page='+pagination.page,
-//     method: 'GET'
-//   })
-// }
+export function fetch_UserListByPage(pagination,obj){
+  let st = objectIterator(obj)
+  return request({
+    url: '/api-auth/v1/user/bypage/'+st+'&page='+pagination.page,
+    method: 'GET'
+  })
+}
 //
-// export function fetch_OpsUserList(){
-//   return request({
-//     url: '/api-auth/v1/opsuser/',
-//     method: 'GET'
-//   })
-// }
+export function fetch_OpsUserList(){
+  return request({
+    url: '/api-auth/v1/opsuser/',
+    method: 'GET'
+  })
+}
 //
 // export function fetch_OpsUserListByPage(pagination){
 //   return request({
@@ -35,21 +35,24 @@ import { objectIterator } from '@/utils/iterator'
 //   })
 // }
 //
-// export function create_User(data){
-//   return request({
-//     url: '/api-auth/v1/user/create/',
-//     method: 'POST',
-//     data: data
-//   })
-// }
-//
-// export function update_User(data){
-//   return request({
-//     url: '/api-auth/v1/user/'+data.id+'/update/',
-//     method: 'PUT',
-//     data: data
-//   })
-// }
+
+// 创建用户
+export function create_User(data){
+  return request({
+    url: '/api-auth/v1/user/create/',
+    method: 'POST',
+    data: data
+  })
+}
+
+// 更改用户状态
+export function update_User(data){
+  return request({
+    url: '/api-auth/v1/user/'+data.id+'/update/',
+    method: 'PUT',
+    data: data
+  })
+}
 //
 // export function qrcode_User(){
 //   return request({
@@ -76,6 +79,7 @@ export function is_expire_User(){
 //     method: 'GET'
 //   })
 // }
+
 // 获取权限分组信息，用来支持分组搜索
 export function fetch_PmnGroupListByPage(pagination,obj){
   let st = objectIterator(obj)
