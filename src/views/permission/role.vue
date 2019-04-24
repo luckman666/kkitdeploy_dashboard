@@ -209,13 +209,14 @@ export default {
     init() {
       // 执行该方法时设置加载状态为true
       this.listLoading = true;
-      // 获取权限组，公有多少个组，每个组ID和name
+      // 获取权限组，共有多少个组，每个组ID和name
       fetch_PmnGroupListByPage(this.pagination, this.search_obj).then(
         response => {
           // 有多少个组
           this.pagination.count = response.data.count;
           // 每个组所包含的权限
           this.list = response.data.results;
+          // console.log('this.list!!!!!',this.list)
           // 加载结束，设置取消状态
           this.listLoading = false;
         }

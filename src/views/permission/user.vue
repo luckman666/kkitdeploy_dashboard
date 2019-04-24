@@ -104,6 +104,9 @@
         </template>
       </el-table-column>
 
+
+
+
       <el-table-column align="center" label="操作" width="220px" >
         <template slot-scope="user">
           <!--<el-button type="primary" size="medium" @click="handleGroup(user.row)" :disabled="btnStatus">管理组</el-button>-->
@@ -123,35 +126,73 @@
 <!-- 创建用户 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible" width="45%" top="20vh">
       <el-form :rules="rules" ref="userForm" :model="commit_obj" label-position="left" >
+        <el-row style="margin-bottom:10px;">
+          <el-col :span="11" style="margin-left: 5px;">
+            <el-form-item label="登录账号" prop="username">
+              <el-input v-model="commit_obj.username"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" style="float:right;">
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="commit_obj.password"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-        <el-form-item label="登录用户名" prop="username">
-          <el-input v-model="commit_obj.username"></el-input>
+        <el-row style="margin-bottom:10px;">
+          <el-col :span="11" style="margin-left: 5px;">
+            <el-form-item label="姓名" prop="full_name">
+              <el-input v-model="commit_obj.full_name"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="11" style="float:right;">
+            <el-form-item label="电话" prop="phone">
+              <el-input v-model="commit_obj.phone"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row style="margin-bottom:10px;">
+
+          <el-col :span="11" style="margin-left: 5px;">
+            <el-form-item label="电子邮箱" prop="email">
+              <el-input v-model="commit_obj.email"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="11" style="float:right;">
+            <el-form-item label="备注" prop="info">
+              <el-input v-model="commit_obj.info"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+        <el-form-item label="应用组" prop="expire">
+            <el-checkbox  :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+            <div style="margin: 15px 0;"></div>
+            <el-checkbox-group v-model="checkedGroup" @change="handleCheckedGroupChange">
+              <el-checkbox v-for="group in groupList" :label="group" :key="group.id">{{group.name}}</el-checkbox>
+            </el-checkbox-group>
         </el-form-item>
 
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="commit_obj.password"></el-input>
-        </el-form-item>
 
-        <el-form-item label="面板显示名" prop="full_name">
-          <el-input v-model="commit_obj.full_name"></el-input>
-        </el-form-item>
 
-        <el-form-item label="Phone" prop="phone">
-          <el-input v-model="commit_obj.phone"></el-input>
-        </el-form-item>
-        
-        <el-form-item label="电子邮箱" prop="email">
-          <el-input v-model="commit_obj.email"></el-input>
-        </el-form-item>
+        <el-form-item label="授权时长" prop="expire">
+          <!--<el-input-number -->
+          <!--:min="1"-->
+          <!--v-model="commit_obj.expire"></el-input-number>-->
 
-        <el-form-item label="头衔与位置" prop="info">
-          <el-input v-model="commit_obj.info"></el-input>
-        </el-form-item>
+          <el-select v-model="commit_obj.expire" filterable placeholder="请选择或自定义">
+            <el-option
+              v-for="item in options"
+              :key="item.expire"
+              :label="item.label"
+              :value="item.expire">
+            </el-option>
+          </el-select>
 
-        <el-form-item label="二次验证时间" prop="expire">
-          <el-input-number 
-          :min="1"
-          v-model="commit_obj.expire"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -197,7 +238,8 @@ import {
   create_User,
   update_User,
   fetch_PmnGroupList,
-  is_expire_User
+  is_expire_User,
+  fetch_PmnGroupListByPage,
 } from "@/api/auth";
 export default {
   data() {
@@ -213,8 +255,38 @@ export default {
         page: 1,
         count: 0
       },
+    // 新建用户全选字段，默认都不选
+      checkAll: false,
+      //
+      checkedGroup: [],
+      // 用户重新选择后的结果存储列表
+      newUserSetGroup:[],
+      isIndeterminate: true,
+      // 获取所有组的信息
+      groupList:[],
+      newCheckedGroup: [],
+      // 组列表
       groups: [],
       dialogStatus: "",
+      // 授权时长选项
+      options: [{
+          expire: 60 * 10,
+          label: '1小时'
+        }, {
+          expire: 4 * 60 * 10,
+          label: '4小时'
+        }, {
+          expire: 24 * 60 * 10,
+          label: '24小时'
+        }, {
+          expire: 7 * 24 * 60 * 10,
+          label: '1周'
+        }, {
+          expire: 12 * 7 * 24 * 60 * 10,
+          label: '三个月'
+        }],
+      expire: '' ,
+
       textMap: {
         group: "管理组",
         update: "编辑用户",
@@ -255,6 +327,7 @@ export default {
   },
   created() {
     this.init();
+    this.getGroups();
   },
   filters: {
     statusFilter(is_active) {
@@ -275,6 +348,21 @@ export default {
         this.listLoading = false;
       });
     },
+    getGroups() {
+      // 执行该方法时设置加载状态为true
+      this.listLoading = true;
+      // 获取权限组，共有多少个组，每个组ID和name
+      fetch_PmnGroupListByPage(this.pagination, this.search_obj).then(
+        response => {
+          // 有多少个组
+          this.pagination.count = response.data.count;
+          // 每个组所包含的权限
+          this.groupList = response.data.results;
+          // 加载结束，设置取消状态
+          this.listLoading = false;
+        }
+      );
+    },
     init_pmngroup() {
       fetch_PmnGroupList().then(response => {
         this.groups = [];
@@ -287,6 +375,40 @@ export default {
         }
       });
     },
+    // 创建用户全选组方法
+    handleCheckAllChange(val) {
+      this.commit_obj.groups = []
+      const newCheckedGroup = this.groupList
+      this.checkedGroup = val ? newCheckedGroup : [];
+      // console.log('this.checkedGroup%%',this.checkedGroup)
+      if (this.checkedGroup) {
+          for (const newGroupObjId of this.checkedGroup) {
+          this.commit_obj.groups.push(
+            newGroupObjId.id
+          );
+        }
+      }
+        console.log('this.commit_obj.groups!!@@##',this.commit_obj.groups)
+      },
+
+
+    // 单选组方法
+    handleCheckedGroupChange(value) {
+      this.commit_obj.groups = []
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.newUserSetGroup.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.newUserSetGroup.length;
+      // 单选赋值给对象
+      if (checkedCount) {
+        for (const newGroupObjId of value) {
+          this.commit_obj.groups.push(
+            newGroupObjId.id
+          );
+        }
+      }
+      console.log('this.commit_obj.groups',this.commit_obj.groups)
+    },
+
     reset_commit() {
       this.commit_obj = {
         is_active: false
@@ -423,7 +545,7 @@ export default {
       this.$refs["userForm"].validate(valid => {
         if (valid) {
           this.btnStatus = true;
-          console.log('this.commit_obj!!!!',this.commit_obj)
+          // console.log('this.commit_obj!!!!',this.commit_obj)
           create_User(this.commit_obj)
             .then(() => {
               this.resetSearch();
