@@ -197,6 +197,8 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogUserVisible = false" :disabled="btnStatus">取消</el-button>
+        <!--<el-button type="danger" size="medium" @click="handleQRCode" :disabled="btnStatus">删除</el-button>-->
+        <el-button type="danger" size="medium" @click="deleteUser" :disabled="btnStatus">删除</el-button>
         <el-button type="primary" @click="handleQRCode" :disabled="btnStatus">提交</el-button>
       </div>
     </el-dialog>
@@ -237,9 +239,11 @@ import {
   fetch_UserListByPage,
   create_User,
   update_User,
+  delete_User,
   fetch_PmnGroupList,
   is_expire_User,
   fetch_PmnGroupListByPage,
+  sendemail
 } from "@/api/auth";
 export default {
   data() {
@@ -270,19 +274,19 @@ export default {
       dialogStatus: "",
       // 授权时长选项
       options: [{
-          expire: 60 * 10,
+          expire: 60 * 60,
           label: '1小时'
         }, {
-          expire: 4 * 60 * 10,
+          expire: 4 * 60 * 60,
           label: '4小时'
         }, {
-          expire: 24 * 60 * 10,
+          expire: 24 * 60 * 60,
           label: '24小时'
         }, {
-          expire: 7 * 24 * 60 * 10,
+          expire: 7 * 24 * 60 * 60,
           label: '1周'
         }, {
-          expire: 12 * 7 * 24 * 60 * 10,
+          expire: 12 * 7 * 24 * 60 * 60,
           label: '三个月'
         }],
       expire: '' ,
@@ -408,7 +412,6 @@ export default {
       }
       console.log('this.commit_obj.groups',this.commit_obj.groups)
     },
-
     reset_commit() {
       this.commit_obj = {
         is_active: false
@@ -454,18 +457,24 @@ export default {
         this.$refs["userForm"].clearValidate();
       });
     },
-    // handleUpdate(row) {
-    //   this.commit_obj = Object.assign({}, row); // copy obj
-    //   this.dialogStatus = "update";
-    //   this.$nextTick(() => {
-    //     this.$refs["userForm"].clearValidate();
-    //   });
-    //   this.dialogUserVisible = true;
-    // },
-    handleUpdate(row){
-      this.commit_obj = Object.assign({}, row);
-      this.$router.push({name: "edituser", params: {'userinfo':this.commit_obj}});
+    handleUpdate(row) {
+      this.commit_obj = Object.assign({}, row); // copy obj
+      this.dialogStatus = "update";
+      this.$nextTick(() => {
+        this.$refs["userForm"].clearValidate();
+      });
+      this.dialogUserVisible = true;
     },
+    handleDelete(row) {
+      this.dialogStatus = "delete";
+      this.dialogGroupVisible = true;
+      this.commit_obj = Object.assign({}, row);
+      this.init_pmngroup();
+    },
+    // handleUpdate(row){
+    //   this.commit_obj = Object.assign({}, row);
+    //   this.$router.push({name: "edituser", params: {'userinfo':this.commit_obj}});
+    // },
     handleQRCode() {
       is_expire_User()
         .then(response => {
@@ -481,7 +490,9 @@ export default {
               this.statusUser()
             } else if (this.dialogStatus === "reset"){
               this.resetUser()
-            } else {
+            } else if (this.dialogStatus === "delete"){
+              this.deleteUser()
+            }else {
               this.createUser()
             }
           }
@@ -510,6 +521,18 @@ export default {
           this.$message({
             showClose: true,
             message: "重置成功",
+            type: "success"
+          });
+          this.init()
+          this.reset_dialog()
+        })
+    },
+    deleteUser(){
+      // this.commit_obj.have_qrcode = false
+        delete_User(this.commit_obj).then(response => {
+          this.$message({
+            showClose: true,
+            message: "删除成功",
             type: "success"
           });
           this.init()
@@ -548,6 +571,8 @@ export default {
           // console.log('this.commit_obj!!!!',this.commit_obj)
           create_User(this.commit_obj)
             .then(() => {
+              // 成功了发送邮件
+              sendemail(this.commit_obj)
               this.resetSearch();
               this.reset_dialog();
               this.$message({
@@ -570,9 +595,12 @@ export default {
           this.btnStatus = true;
           update_User(this.commit_obj)
             .then(() => {
+              // console.log('this.commit_obju_pdate',this.commit_obj)
+              sendemail(this.commit_obj);
               this.reset_commit();
               this.init();
-              this.reset_dialog()
+              this.reset_dialog();
+              this.commit_obj.type = this.dialogStatus
               this.$message({
                 showClose: true,
                 message: "更新成功",

@@ -27,6 +27,7 @@ export function fetch_OpsUserList(){
     method: 'GET'
   })
 }
+
 //
 // export function fetch_OpsUserListByPage(pagination){
 //   return request({
@@ -36,6 +37,13 @@ export function fetch_OpsUserList(){
 // }
 //
 
+export function delete_User(data) {
+  return request({
+    url: '/api-auth/v1/user/'+data.id+'/delete/',
+    method: 'DELETE',
+    data: data
+  })
+}
 // 创建用户
 export function create_User(data){
   return request({
@@ -44,6 +52,14 @@ export function create_User(data){
     data: data
   })
 }
+export function sendemail(data) {
+    return request({
+    url: '/api-utils/v1/sendemail/',
+    method: 'POST',
+    data: data
+  })
+}
+
 
 // 更改用户状态
 export function update_User(data){
