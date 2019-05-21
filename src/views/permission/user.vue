@@ -16,10 +16,10 @@
           联系方式： <el-input size="medium" style="width: 200px;" v-model="search_obj.phone" class="filter-item" placeholder="根据电话号码模糊搜索"></el-input>
         </el-col>
         <el-col :span="7" :offset="1">
-          姓名： <el-input size="medium" style="width: 200px;" v-model="search_obj.name" class="filter-item" placeholder="根据姓名模糊搜索"></el-input>
+          姓名： <el-input size="medium" style="width: 200px" v-model="search_obj.name" class="filter-item" placeholder="根据姓名模糊搜索"></el-input>
         </el-col>
         <el-col :span="5" :offset="1">
-          用户名： <el-input size="medium" style="width: 200px;" v-model="search_obj.username" class="filter-item" placeholder="根据用户名模糊搜索"></el-input>
+          用户名： <el-input size="medium" style="width: 120px;" v-model="search_obj.username" class="filter-item" placeholder="根据用户名模糊搜索"></el-input>
         </el-col>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="searchUser" style="float:right;" :disabled="btnStatus">搜索</el-button>
       </el-row>
@@ -29,7 +29,7 @@
         </el-col>
         <el-col :span="7" :offset="1">
           状态： 
-          <el-select v-model="search_obj.is_active" placeholder="请选择" clearable>
+          <el-select v-model="search_obj.is_active" style="width: 200px;" placeholder="请选择" clearable>
             <el-option
               key="True"
               label="可使用"

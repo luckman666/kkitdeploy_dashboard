@@ -5,7 +5,9 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-
+// import componentsRouter from './modules/components'
+// import chartsRouter from './modules/charts'
+// import tableRouter from './modules/table'
 /* Router Modules */
 
 
@@ -110,17 +112,6 @@ export const asyncRoutes = [
         }
       },
 
-      // 用户编辑页面
-      {
-        path: 'edituser',
-        component: () => import('@/views/permission/edituser'),
-        name: 'edituser',
-        hidden: true,
-        meta: {
-          title: 'edituser',
-          roles: ['admin']
-        }
-      }
     ]
   },
   /** when your routing map is too long, you can split it into small modules **/
@@ -128,7 +119,41 @@ export const asyncRoutes = [
   // chartsRouter,
   // nestedRouter,
   // tableRouter,
+      // 资产管理界面
+  {
+    path: '/serverassets',
+    component: Layout,
+    redirect: '/serverassets/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'serverassets',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'AdminUser',
+        component: () => import('@/views/serverassets/AdminUser'),
+        name: 'AdminUser',
+        // hidden: true,
+        meta: {
+          title: 'AdminUser',
+          roles: ['admin']
+        }
+      },
 
+      {
+        path: 'assetsList',
+        component: () => import('@/views/serverassets/assetsList'),
+        name: 'assetsList',
+        // hidden: true,
+        meta: {
+          title: 'assetsList',
+          roles: ['admin']
+        }
+      }
+      ]
+  },
 
 
   {
