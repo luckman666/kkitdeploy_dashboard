@@ -1,14 +1,14 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-<!-- 系统登录字样 -->
+      <!-- 系统登录字样 -->
       <div class="title-container">
         <h3 class="title">
           {{ $t('login.title') }}
         </h3>
         <lang-select class="set-language" />
       </div>
-<!-- username -->
+      <!-- username -->
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -22,7 +22,7 @@
           auto-complete="on"
         />
       </el-form-item>
-<!-- 大小写开启 -->
+      <!-- 大小写开启 -->
       <el-tooltip v-model="capsTooltip" content="大小写锁定已经开启" placement="right" manual>
         <el-form-item prop="password">
           <span class="svg-container">
@@ -50,8 +50,7 @@
         {{ $t('login.logIn') }}
       </el-button>
 
-      <div style="position:relative">
-      </div>
+      <div style="position:relative" />
     </el-form>
 
     <el-dialog :title="$t('login.thirdparty')" :visible.sync="showDialog">
@@ -153,22 +152,23 @@ export default {
     // 处理登录请求
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        var that = this
         if (valid) {
-          that.loading = true
-          that.$store.dispatch('user/login', that.loginForm)
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              that.$router.push({ path: that.redirect || '/' })
-              that.loading = false
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.loading = false
             })
             .catch(() => {
-              that.loading = false
+              this.loading = false
             })
         } else {
+          console.log('error submit!!')
           return false
         }
       })
     }
+
   }
 }
 </script>

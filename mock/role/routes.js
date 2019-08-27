@@ -255,7 +255,7 @@ export const asyncRoutes = [
   {
     path: '/nested',
     component: 'layout/Layout',
-    redirect: '/nested/menu1/menu1-1',
+    redirect: '/nested/batchmanage/batchmanage-1',
     name: 'Nested',
     meta: {
       title: 'nested',
@@ -264,33 +264,33 @@ export const asyncRoutes = [
     children: [
       {
         path: 'menu1',
-        component: 'views/nested/menu1/index',
+        component: 'views/nested/batchmanage/index',
         name: 'Menu1',
         meta: { title: 'menu1' },
-        redirect: '/nested/menu1/menu1-1',
+        redirect: '/nested/batchmanage/batchmanage-1',
         children: [
           {
             path: 'menu1-1',
-            component: 'views/nested/menu1/menu1-1',
+            component: 'views/nested/batchmanage/batchmanage-1',
             name: 'Menu1-1',
             meta: { title: 'menu1-1' }
           },
           {
             path: 'menu1-2',
-            component: 'views/nested/menu1/menu1-2',
+            component: 'views/nested/batchmanage/batchmanage-2',
             name: 'Menu1-2',
-            redirect: '/nested/menu1/menu1-2/menu1-2-1',
+            redirect: '/nested/batchmanage/batchmanage-2/batchmanage-2-1',
             meta: { title: 'menu1-2' },
             children: [
               {
                 path: 'menu1-2-1',
-                component: 'views/nested/menu1/menu1-2/menu1-2-1',
+                component: 'views/nested/batchmanage/batchmanage-2/batchmanage-2-1',
                 name: 'Menu1-2-1',
                 meta: { title: 'menu1-2-1' }
               },
               {
                 path: 'menu1-2-2',
-                component: 'views/nested/menu1/menu1-2/menu1-2-2',
+                component: 'views/nested/batchmanage/batchmanage-2/batchmanage-2-2',
                 name: 'Menu1-2-2',
                 meta: { title: 'menu1-2-2' }
               }
@@ -298,7 +298,7 @@ export const asyncRoutes = [
           },
           {
             path: 'menu1-3',
-            component: 'views/nested/menu1/menu1-3',
+            component: 'views/nested/batchmanage/batchmanage-3',
             name: 'Menu1-3',
             meta: { title: 'menu1-3' }
           }

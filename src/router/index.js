@@ -5,11 +5,6 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-// import componentsRouter from './modules/components'
-// import chartsRouter from './modules/charts'
-// import tableRouter from './modules/table'
-/* Router Modules */
-
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -59,6 +54,17 @@ export const constantRoutes = [
     component: () => import('@/views/errorPage/401'),
     hidden: true
   },
+  //   {
+  //   path: '',
+  // component: Layout,
+  // redirect: 'dashboard',
+  //   component: () => import('@/views/batchmanage/deploymanager/deploymanager'),
+  //   name: 'deploy',
+  //   meta: {
+  //     title: 'deploy',
+  //     icon: 'deploy'
+  //   },
+  // }
   {
     path: '',
     component: Layout,
@@ -66,9 +72,10 @@ export const constantRoutes = [
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
+        // component: () => import('@/views/batchmanage/deploymanager/deploymanager'),
+        component: () => import('@/views/batchmanage/deploymanager'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
+        meta: { title: 'generalDeploy', icon: 'dashboard', noCache: true, affix: true }
       }
     ]
   }
@@ -79,82 +86,6 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/index',
-    alwaysShow: true, // will always show the root menu
-    meta: {
-      title: 'permission',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-            // 人员管理
-      {
-        path: 'user',
-        component: () => import('@/views/permission/user'),
-        name: 'user',
-        // hidden: true,
-        meta: {
-          title: 'user',
-          roles: ['admin']
-        }
-      },
-      // 角色管理
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'rolePermission',
-          roles: ['admin']
-        }
-      },
-
-    ]
-  },
-  /** when your routing map is too long, you can split it into small modules **/
-  // componentsRouter,
-  // chartsRouter,
-  // nestedRouter,
-  // tableRouter,
-      // 资产管理界面
-  {
-    path: '/serverassets',
-    component: Layout,
-    redirect: '/serverassets/index',
-    alwaysShow: true, // will always show the root menu
-    meta: {
-      title: 'serverassets',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'AdminUser',
-        component: () => import('@/views/serverassets/AdminUser'),
-        name: 'AdminUser',
-        // hidden: true,
-        meta: {
-          title: 'AdminUser',
-          roles: ['admin']
-        }
-      },
-
-      {
-        path: 'assetsList',
-        component: () => import('@/views/serverassets/assetsList'),
-        name: 'assetsList',
-        // hidden: true,
-        meta: {
-          title: 'assetsList',
-          roles: ['admin']
-        }
-      }
-      ]
-  },
-
 
   {
     path: '/error',
@@ -196,18 +127,7 @@ export const asyncRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/i18n',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/i18n-demo/index'),
-  //       name: 'I18n',
-  //       meta: { title: 'i18n', icon: 'international' }
-  //     }
-  //   ]
-  // },
+
   {
     path: '/theme',
     component: Layout,
@@ -223,7 +143,7 @@ export const asyncRoutes = [
     ]
   },
 
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/dashboard', hidden: true }
 ]
 
 const createRouter = () => new Router({

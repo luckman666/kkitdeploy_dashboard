@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { getToken } from "@/utils/auth"
+import { getToken } from '@/utils/auth'
 import { Message } from 'element-ui'
 import store from '@/store'
 
 // let BASE_API ='http://localhost:8001'
-let BASE_API ='http://192.168.31.74:8001'
-
+const BASE_API = process.env.VUE_APP_BASE_API
+// let BASE_API ='http://39.105.161.183:8001'
+// let BASE_API ='http://192.168.1.104:8001'
 const service = axios.create({
   baseURL: BASE_API, // api 的 base_url
   timeout: 50000 // request timeout
@@ -13,36 +14,34 @@ const service = axios.create({
 service.defaults.withCredentials = true
 // request interceptor
 
-
 service.interceptors.request.use(
   config => {
-    if(store.getters.token) {
+    if (store.getters.token) {
       // config.headers['Content-Type'] = 'application/json'
       config.headers['authorization'] = 'JWT ' + getToken()
     }
     return config
   },
   error => {
-    console.log(error)
+    // console.log(error)
     Promise.reject(error)
   }
 )
 
 axios.interceptors.response.use(function(response) {
-  return response;
+  return response
 }, function(error) {
-  return Promise.reject(error);
+  return Promise.reject(error)
 })
 
 // 返回有错误，查找错误函数
-function findError(error){
-  console.log('error!!!!',error)
-  if(error.response.data.hasOwnProperty('detail')){
+function findError(error) {
+  // console.log('error!!!!',error)
+  if (error.response.data.hasOwnProperty('detail')) {
     return error.response.data.detail
-  }else if(error.response.data.hasOwnProperty('non_field_errors')){
+  } else if (error.response.data.hasOwnProperty('non_field_errors')) {
     return error.response.data.non_field_errors
-  }
-  else{
+  } else {
     return '未知错误'
   }
 }

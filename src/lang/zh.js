@@ -1,13 +1,15 @@
 export default {
   route: {
     dashboard: '首页',
+    generalDeploy: '常规部署',
     documentation: '文档',
     guide: '引导页',
     permission: '权限管理',
     serverassets: '资产管理',
     assetsList: '资产列表',
-    AdminUser:'管理账户',
-    SystemUser:'系统账户',
+    batchmanage: '运维管理',
+    AdminUser: '管理账户',
+    SystemUser: '系统账户',
     rolePermission: '角色权限',
     edituser: '人员编辑',
     user: '人员权限',
@@ -35,13 +37,18 @@ export default {
     mixChart: '混合图表',
     example: '综合实例',
     nested: '路由嵌套',
-    menu1: '菜单1',
-    'menu1-1': '菜单 1-1',
-    'menu1-2': '菜单 1-2',
-    'menu1-2-1': '菜单 1-2-1',
-    'menu1-2-2': '菜单 1-2-2',
-    'menu1-3': '菜单 1-3',
-    menu2: '菜单 2',
+    batchops: '批量操作',
+    batchCommand: '执行命令',
+    batchSend: '传送文件',
+    batchScript: '执行脚本',
+    deploy: '部署管理',
+    // menu1: '菜单1',
+    // 'batchCommand': '菜单 1-1',
+    // 'batchSend': '菜单 1-2',
+    // 'batchSend-1': '菜单 1-2-1',
+    // 'batchSend-2': '菜单 1-2-2',
+    // 'batchScript': '菜单 1-3',
+    // menu2: '菜单 2',
     Table: 'Table',
     dynamicTable: '动态 Table',
     dragTable: '拖拽 Table',
@@ -100,7 +107,7 @@ export default {
     confirm: '确定',
     cancel: '取消'
   },
-  serverassets:{
+  serverassets: {
 
   },
   guide: {
@@ -123,15 +130,32 @@ export default {
     dragTips2: '拖拽后顺序',
     title: '标题',
     importance: '重要性',
+    Heroes: '金榜',
     protocol: '连接协议',
-    hostname: '主机名称',
+    hostname: '主机别称',
+    command: '执行命令',
+    file: '传送文件',
+    script: '执行脚本',
     ip: '内网IP',
+    FetchAssetsDetail: '资产详细信息',
     public_ip: '公网IP',
     node: '节  点',
     lable: '标  签',
     comment: '备  注',
-    // os: '系统类型',
+    os: '系统类型',
     checks_all: '全选',
+    vendor: '供应商',
+    sn: 'SN码',
+    cpu_count: 'CPU颗数',
+    cpu_cores: 'CPU核数',
+    cpu_vcpus: '逻辑CPU数',
+    memory: '内存大小',
+    disk_total: '硬盘大小',
+    disk_info: '硬盘详情',
+    os_version: '系统版本',
+    os_arch: '系统位数',
+    hostname_raw: '主机名',
+    labels: '标签',
     search: '搜索',
     add: '新建资产',
     updateAssesInfo: '更新硬件信息',
@@ -152,7 +176,8 @@ export default {
     draft: '草稿',
     delete: '删除',
     cancel: '取 消',
-    confirm: '确 定'
+    confirm: '确 定',
+    upload: '上传'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
@@ -166,6 +191,7 @@ export default {
   },
   zip: {
     export: '导出',
+
     placeholder: '请输入文件名(默认file)'
   },
   pdf: {
@@ -188,5 +214,11 @@ export default {
     tagsView: '开启 Tags-View',
     fixedHeader: '固定 Header',
     sidebarLogo: '侧边栏 Logo'
+  },
+  deploy: {
+    commit: '提交',
+    checklog: '查看日志',
+    reset: '重置'
   }
+
 }

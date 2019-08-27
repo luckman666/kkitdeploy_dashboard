@@ -1,14 +1,13 @@
 import request from '@/utils/request'
-import { removeToken } from "@/utils/auth"
+import { removeToken } from '@/utils/auth'
 // 登录
 export function login(data) {
-  console.log('data',data)
   return request({
     url: '/api-auth/login/',
     method: 'POST',
-    data:{
-      username:data.username,
-      password:data.password
+    data: {
+      username: data.username,
+      password: data.password
     }
   })
 }

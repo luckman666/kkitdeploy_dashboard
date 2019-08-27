@@ -10,7 +10,7 @@ const state = {
   roles: [],
   email: '',
   phone: '',
-  info: '',
+  info: ''
 
 }
 
@@ -51,18 +51,18 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
-    console.log('userInfo!!!!',userInfo)
+    // console.log('userInfo!!!!',userInfo)
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password })
         .then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        console.log('error!!',error)
-        reject(error)
-      })
+          const { data } = response
+          commit('SET_TOKEN', data.token)
+          setToken(data.token)
+          resolve()
+        }).catch(error => {
+        // console.log('error!!',error)
+          reject(error)
+        })
     })
   },
 
@@ -71,13 +71,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-        console.log('getinfo!!',data)
+        // console.log('getinfo!!',data)
         if (!data) {
           reject('验证失败, 请重新登录.')
         }
 
         const { roles, email, phone, info, name, username, avatar } = data
-        console.log('roles!!!',roles)
+        // console.log('roles!!!',roles)
         // roles must be a non-empty array
         // if (!roles || roles.length <= 0) {
         //   reject('getInfo: roles must be a non-null array!')

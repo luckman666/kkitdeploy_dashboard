@@ -22,6 +22,13 @@ import * as filters from './filters' // global filters
 
 import { mockXHR } from '../mock' // simulation data
 
+// websocket
+import VueResource from 'vue-resource'
+Vue.use(VueResource)
+import VueNativeSock from 'vue-native-websocket'
+Vue.use(VueNativeSock, process.env.VUE_APP_WS_BASE_API)
+// websocket
+
 // mock api in github pages site build
 if (process.env.NODE_ENV === 'production') { mockXHR() }
 
@@ -42,5 +49,8 @@ new Vue({
   router,
   store,
   i18n,
+
+  VueNativeSock,
+  VueResource,
   render: h => h(App)
 })

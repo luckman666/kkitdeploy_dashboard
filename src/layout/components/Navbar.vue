@@ -22,7 +22,7 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="imgUrl" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -31,7 +31,7 @@
               {{ $t('navbar.dashboard') }}
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
+          <a target="_blank" href="https://github.com/luckman666/">
             <el-dropdown-item>
               {{ $t('navbar.github') }}
             </el-dropdown-item>
@@ -56,6 +56,7 @@ import LangSelect from '@/components/LangSelect'
 import Search from '@/components/HeaderSearch'
 
 export default {
+
   components: {
     Breadcrumb,
     Hamburger,
@@ -72,6 +73,11 @@ export default {
       'avatar',
       'device'
     ])
+  },
+  data() {
+    return {
+      imgUrl: require('../../icons/Logo.jpg')
+    }
   },
   methods: {
     toggleSideBar() {
