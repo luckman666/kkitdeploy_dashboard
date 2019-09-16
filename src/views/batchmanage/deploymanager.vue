@@ -30,7 +30,6 @@
             </el-button>
           </el-col>
           <el-col :span="12">
-
             <!--超时:-->
             <el-checkbox v-model="configFileChecked" border size="medium">配置 </el-checkbox>
           </el-col>
@@ -405,8 +404,6 @@ export default {
       this.configFileChecked = false
       this.textareaVisible = false
       this.dataListVisible = true
-
-
     },
     handleDatabase(response) {
       this.DataDaseOpsList = []
@@ -478,9 +475,9 @@ export default {
     },
       handleHeroes() {
         const weiXinUrl = require("../../icons/weChat.jpg");
-        this.$alert('<strong><img src='+ weiXinUrl + ' width=100px height=100px></strong>', '作者公众号', {
+        this.$alert('<div style="float:left" ><strong><img src='+ weiXinUrl + ' width=200px height=200px></strong></div><div>1、有bug？</div><div>2、有意见？</div><div>3、想参与该项目？</div><div>4、获取项目最新动态？</div><div>5、共同学习全栈技术？</div><div>6、认识更多技术骚男？</div><div>7、没啥想法！就要喷波哥？</div><div>8、关注公众号！波哥等你！</div>', '作者公众号', {
           dangerouslyUseHTMLString: true,
-          // center: true
+          showConfirmButton:false,
         });
       },
     handleTool(response) {
@@ -596,8 +593,8 @@ export default {
 
       this.websock.onmessage = this.websocketonmessage
       // this.websock.onopen = this.websocketonopen;
-      this.websock.onerror = this.websocketonerror
-      this.websock.onclose = this.websocketclose
+      // this.websock.onerror = this.websocketonerror
+      // this.websock.onclose = this.websocketclose
     },
     websocketonopen(actions) { // 连接建立之后执行send方法发送数据
       // let actions = {"root":"root1234"};
@@ -691,7 +688,6 @@ export default {
         message: data.detail,
         type: 'success'
       })
-      // console.log('this.deployObjectInfo', this.deployObjectInfo)
       this.websocketsend(this.deployObjectInfo)
       this.reSet()
     }
