@@ -47,3 +47,13 @@ export function UnRarUploadFile(data) {
     data
   })
 }
+
+
+
+export function checkPort(data) {
+  return request({
+    url: '/api-utils/v1/checkPort/',
+    method: 'post',
+    data
+  })
+}

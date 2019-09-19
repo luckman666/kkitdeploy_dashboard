@@ -4,7 +4,6 @@
     <el-row>
 
       <el-col :span="10">
-
         <!-- 搜索栏 -->
         <div class="filter-container">
           <el-col :span="12">
@@ -31,14 +30,13 @@
           </el-col>
           <el-col :span="12">
             <!--超时:-->
-            <el-checkbox v-model="configFileChecked" border size="medium">配置 </el-checkbox>
+            <el-button v-waves type="primary" class="filter-item" @click="handleCheckPort"><svg-icon icon-class="port"></svg-icon>&nbsp;{{ $t('table.checkProt') }}</el-button>
           </el-col>
         </div>
-        <!--</el-col>-->
         <!-- end -->
+        <!--菜单-->
         <el-col :span="12">
 
-          <!-- 搜执行栏 -->
           <div class="filter-container">
             <div class="block">
               <span class="demonstration" />
@@ -51,7 +49,7 @@
               />
             </div>
           </div>
-          <!-- 搜执行栏 -->
+
           <div class="filter-container">
             <div class="block">
               <span class="demonstration" />
@@ -65,7 +63,6 @@
             </div>
           </div>
 
-          <!-- 搜执行栏 -->
           <div class="filter-container">
             <div class="block">
               <span class="demonstration" />
@@ -92,9 +89,24 @@
             </div>
           </div>
 
+          <div class="filter-container">
+            <div class="block">
+              <span class="demonstration" />
+              <el-cascader
+                v-model="value"
+                :options="MiddlewareOpsList"
+                placeholder="中间件"
+                :props="{ expandTrigger: 'hover' }"
+                @change="handleChange"
+              />
+            </div>
+          </div>
+
         </el-col>
         <el-col :span="12">
+
           <div class="filter-container">
+            <el-col :span="11">
             <div class="block">
               <el-select v-model="TimeOutValue" placeholder="任务时长">
                 <el-option
@@ -106,6 +118,12 @@
                 />
               </el-select>
             </div>
+            </el-col>
+            <el-col :span="13" style="float:right" >
+            <div>
+              <el-checkbox v-model="configFileChecked" border size="medium">配置</el-checkbox>
+            </div>
+              </el-col>
           </div>
           <!-- 搜执行栏 -->
           <div class="filter-container">
@@ -134,18 +152,18 @@
             </div>
           </div>
 
-          <!--<div class="filter-container">-->
-          <!--<div class="block">-->
-          <!--<span class="demonstration"></span>-->
-          <!--<el-cascader-->
-          <!--v-model="value"-->
-          <!--placeholder="其他"-->
-          <!--:options="OtherOpsList"-->
-          <!--:props="{ expandTrigger: 'hover' }"-->
-          <!--@change="handleChange">-->
-          <!--</el-cascader>-->
-          <!--</div>-->
-          <!--</div>-->
+          <div class="filter-container">
+            <div class="block">
+              <span class="demonstration" />
+              <el-cascader
+                v-model="value"
+                placeholder="备份"
+                :options="backupOpsList"
+                :props="{ expandTrigger: 'hover' }"
+                @change="handleChange"
+              />
+            </div>
+          </div>
 
           <div class="filter-container">
             <div class="block">
@@ -159,7 +177,11 @@
               />
             </div>
           </div>
+
+
+
         </el-col>
+        <!--菜单-->
       </el-col>
       <el-col :span="14">
         <div v-if="textareaVisible" :style="{height:dataListHeight}">
@@ -206,14 +228,13 @@
         <div slot="tip" class="el-upload__tip">3、只能上传rar压缩包！！</div>
       </el-upload>
 
-      <!--<el-input v-model="uploadDest" :placeholder=remindInfo style="width: 50%;" class="filter-item"  />-->
-
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="execDialogFormVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="submitUpload">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 上传对话框 -->
+
     <!-- 上传config弹出框 -->
     <el-dialog :visible.sync="configFileFormVisible">
       <el-upload
@@ -241,8 +262,6 @@
     </el-dialog>
     <!-- 上传对话框 -->
 
-    <!-- 金 榜 -->
-    <!--<el-button type="text" @click="open">点击打开 Message Box</el-button>-->
 
   </div>
 
@@ -250,7 +269,7 @@
 
 <script>
 
-import { fetch_deploy_metadata, exec_deploy, fetch_config_file, updata_configfile, updata_ymlConfigfile, UnRarUploadFile } from '@/api/deploy'
+import { fetch_deploy_metadata, exec_deploy, fetch_config_file, updata_configfile, updata_ymlConfigfile, UnRarUploadFile, checkPort } from '@/api/deploy'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 
@@ -294,10 +313,11 @@ export default {
       ProxyOpsList: [],
       ContainerOpsList: [],
       StorageOpsList: [],
-      // OtherOpsList:[],
+      MiddlewareOpsList:[],
       SustomDataOpsList: [],
       DeployEnvOpsList: [],
       ToolOpsList: [],
+      backupOpsList:[],
       deployObject: {},
       //  部署分类元素
       database: [],
@@ -313,31 +333,32 @@ export default {
       uploadDest: '',
       fileList: [],
       UploadUrl: `${process.env.VUE_APP_BASE_API}/api-utils/v1/upload/`,
-      // upLoadData:{},
+
       upLoadFielCount: 0,
       uploadFileNameList: [],
       uploadObject: {},
 
       options: [{
         TimeOutValue: 30 * 60,
-        label: '限时三十分钟'
+        label: '限三十分钟'
         // disabled: true
       }, {
         TimeOutValue: 60 * 60,
-        label: '限时一小时'
+        label: '限一小时'
         // disabled: true
       }, {
         TimeOutValue: 60 * 60 * 3,
-        label: '限时三小时'
+        label: '限三小时'
       }, {
         TimeOutValue: 60 * 60 * 8,
-        label: '限时八小时'
+        label: '限八小时'
       }],
       TimeOutValue: 60 * 60,
       submitStatus: false,
       reviveStatus: true,
       configFileChecked: false,
-      deployObjectInfo: {}
+      deployObjectInfo: {},
+      checkPortIp:{}
     }
   },
   created() {
@@ -386,9 +407,10 @@ export default {
         this.handleContainer(response)
         this.handleStorage(response)
         this.handleDeployEnv(response)
-        // this.handleOther(response)
+        this.handleMiddleware(response)
         this.handlecustomData(response)
         this.handleTool(response)
+        this.handleBackup(response)
       })
     },
     reSetCommit() {
@@ -402,8 +424,9 @@ export default {
       this.deployObjectInfo = {}
       this.submitStatus = false
       this.configFileChecked = false
-      this.textareaVisible = false
-      this.dataListVisible = true
+      this.textareaVisible = true
+      // this.content = ''
+      this.dataListVisible = false
     },
     handleDatabase(response) {
       this.DataDaseOpsList = []
@@ -473,7 +496,7 @@ export default {
         }
       }
     },
-      handleHeroes() {
+    handleHeroes() {
         const weiXinUrl = require("../../icons/weChat.jpg");
         this.$alert('<div style="float:left" ><strong><img src='+ weiXinUrl + ' width=200px height=200px></strong></div><div>1、有bug？</div><div>2、有意见？</div><div>3、想参与该项目？</div><div>4、获取项目最新动态？</div><div>5、共同学习全栈技术？</div><div>6、认识更多技术骚男？</div><div>7、没啥想法！就要喷波哥？</div><div>8、关注公众号！波哥等你！</div>', '作者公众号', {
           dangerouslyUseHTMLString: true,
@@ -529,13 +552,30 @@ export default {
         tmpDate['children'].push(childrenDic)
       }
     },
+    handleMiddleware(response){
+      this.MiddlewareOpsList = []
+      const meteObject = JSON.parse(response.data).metaData.middleware
+      for (const key in meteObject) {
+        const tmpDate = {}
+        tmpDate['value'] = key
+        tmpDate['label'] = key
+        tmpDate['children'] = []
+        this.MiddlewareOpsList.push(tmpDate)
+        for (const firstInfo of meteObject[key]) {
+          const childrenDic = {}
+          childrenDic['value'] = firstInfo
+          childrenDic['label'] = firstInfo
+          tmpDate['children'].push(childrenDic)
+        }
+      }
+    },
     handleChange(value) {
+      this.reSet()
       this.deployObject['deployName'] = value[1]
       fetch_config_file(this.deployObject).then(response => {
         this.content = response.data[0]
       })
     },
-
     handleNewCongfigFile(configfileInfo) {
       if (this.content === '') {
         this.$message({
@@ -551,7 +591,14 @@ export default {
           this.deployObjectInfo = response.data
           if (response.data.ymkFile != null) {
             this.yml = true
-            this.content = response.data.ymkFile
+            if (response.data.ymkFile === null){
+              fetch_config_file(this.deployObject).then(response => {
+              this.content = response.data[0]
+            })
+            } else {
+              this.content = response.data.ymkFile
+            }
+
           } else if (this.configFileChecked) {
             this.configFileFormVisible = true
           } else {
@@ -559,8 +606,7 @@ export default {
             this.websock.onopen = this.websocketonopen(response.data)
             this.reSet()
             this.websock.onmessage = this.websocketonmessage
-            this.websock.onerror = this.websocketonerror
-            this.websock.onclose = this.websocketclose
+            this.reviveLog()
           }
         })
       }
@@ -579,18 +625,31 @@ export default {
           this.websock.onopen = this.websocketonopen(response.data)
           this.reSet()
           this.websock.onmessage = this.websocketonmessage
-          this.websock.onerror = this.websocketonerror
-          this.websock.onclose = this.websocketclose
+          this.reviveLog()
         }
       })
     },
+    handleBackup(response) {
+      this.backupOpsList = []
+      const meteObject = JSON.parse(response.data).metaData.backup
+      for (const key in meteObject) {
+        const tmpDate = {}
+        tmpDate['value'] = key
+        tmpDate['label'] = key
+        tmpDate['children'] = []
+        this.backupOpsList.push(tmpDate)
+        for (const firstInfo of meteObject[key]) {
+          const childrenDic = {}
+          childrenDic['value'] = firstInfo
+          childrenDic['label'] = firstInfo
+          tmpDate['children'].push(childrenDic)
+        }
+      }
+    },
 
-    // weblocket
-    //
     initWebSocket() { // 初始化weosocket
       const wsuri = process.env.VUE_APP_WS_BASE_API
       this.websock = new WebSocket(wsuri)
-
       this.websock.onmessage = this.websocketonmessage
       // this.websock.onopen = this.websocketonopen;
       // this.websock.onerror = this.websocketonerror
@@ -608,10 +667,12 @@ export default {
       var message = data['message']
       if (message === '52j840y$0_j%aa&') {
         this.submitStatus = false
+        this.websock.onclose = this.websocketclose
       } else {
         this.submitStatus = true
         this.reviveStatus = false
         this.dataList.push(message)
+        //
       }
     },
 
@@ -626,6 +687,29 @@ export default {
 
     // weblogket end
 
+    handleCheckPort() {
+        this.$prompt('请输入要检查端口开放情况的IP（功能未开放）', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))$/,
+          inputErrorMessage: 'IP格式不正确'
+        }).then(({ value }) => {
+          // this.websock.onmessage = this.websocketonmessage
+          // this.checkPortIp['checkPortIp']=value
+          // checkPort(this.checkPortIp)
+
+        this.$message({
+          message: '该功能暂未开放！',
+          type: 'success'
+        })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        });
+      },
     handleModifyStatus(row, status) {
       this.$message({
         message: row.writeConfigRutl,
@@ -682,14 +766,15 @@ export default {
         this.initDeployMetaData()
       })
     },
-
     handleUploadConfigSuccess(data) {
       this.$message({
         message: data.detail,
         type: 'success'
       })
+
       this.websocketsend(this.deployObjectInfo)
       this.reSet()
+      this.reviveLog()
     }
 
   }
