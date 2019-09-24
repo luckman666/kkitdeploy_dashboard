@@ -4,9 +4,14 @@ import { Message } from 'element-ui'
 import store from '@/store'
 
 // let BASE_API ='http://localhost:8001'
-const BASE_API = process.env.VUE_APP_BASE_API
+let BASE_API = process.env.VUE_APP_BASE_API
 // let BASE_API ='http://39.105.161.183:8001'
 // let BASE_API ='http://192.168.1.104:8001'
+// console.log(process.env.NODE_ENV)
+if(process.env.NODE_ENV==='production'){
+  // console.log('111111111')
+  BASE_API = window.IPConfig.baseUrl
+}
 const service = axios.create({
   baseURL: BASE_API, // api 的 base_url
   timeout: 50000 // request timeout

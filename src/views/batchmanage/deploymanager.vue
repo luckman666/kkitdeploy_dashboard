@@ -252,7 +252,7 @@
         <i class="el-icon-upload" />
         <div class="el-upload__text">将config配置文件拖到此处，或<em>点击上传</em></div>
         <div slot="tip" class="el-upload__tip">1、最多上传10个配置文件，不允许压缩哦！</div>
-        <div slot="tip" class="el-upload__tip">2、配置文件会直接写到脚本文件夹下！</div>
+        <div slot="tip" class="el-upload__tip">2、配置文件会直接写到脚本的./conf文件夹下！</div>
       </el-upload>
 
       <div slot="footer" class="dialog-footer">
@@ -332,8 +332,8 @@ export default {
       execDialogFormVisible: false,
       uploadDest: '',
       fileList: [],
-      UploadUrl: `${process.env.VUE_APP_BASE_API}/api-utils/v1/upload/`,
-
+      // UploadUrl: `${process.env.VUE_APP_BASE_API}/api-utils/v1/upload/`,
+      UploadUrl:`${process.env.NODE_ENV==='production'?window.IPConfig.baseUrl:process.env.VUE_APP_BASE_API}/api-utils/v1/upload/`,
       upLoadFielCount: 0,
       uploadFileNameList: [],
       uploadObject: {},
@@ -363,6 +363,7 @@ export default {
   },
   created() {
     this.dataListHeight = document.documentElement.clientHeight - 180 + 'px'
+    // console.log('UploadUrl',this.UploadUrl)
     this.initDeployMetaData()
     this.initWebSocket()
   },
@@ -498,7 +499,7 @@ export default {
     },
     handleHeroes() {
         const weiXinUrl = require("../../icons/weChat.jpg");
-        this.$alert('<div style="float:left" ><strong><img src='+ weiXinUrl + ' width=200px height=200px></strong></div><div>1、有bug？</div><div>2、有意见？</div><div>3、想参与该项目？</div><div>4、获取项目最新动态？</div><div>5、共同学习全栈技术？</div><div>6、认识更多技术骚男？</div><div>7、没啥想法！就要喷波哥？</div><div>8、关注公众号！波哥等你！</div>', '作者公众号', {
+        this.$alert('<div style="float:left" ><strong><img src='+ weiXinUrl + ' width=200px height=200px></strong></div><div>1、bug？意见？建议？</div><div>2、商务合作？</div><div>3、参与或推荐项目？</div><div>4、获取最新动态？</div><div>5、共同学习全栈技术？</div><div>6、认识更多技术骚男？</div><div>7、没啥想法！就要喷波哥？</div><div>8、关注公众号！波哥等你！</div>', '作者公众号', {
           dangerouslyUseHTMLString: true,
           showConfirmButton:false,
         });
@@ -648,7 +649,7 @@ export default {
     },
 
     initWebSocket() { // 初始化weosocket
-      const wsuri = process.env.VUE_APP_WS_BASE_API
+      const wsuri = process.env.NODE_ENV==='production'?window.IPConfig.wsuri:process.env.VUE_APP_WS_BASE_API
       this.websock = new WebSocket(wsuri)
       this.websock.onmessage = this.websocketonmessage
       // this.websock.onopen = this.websocketonopen;
